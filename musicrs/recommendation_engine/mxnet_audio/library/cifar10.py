@@ -6,6 +6,7 @@ import os
 from lru import LRU
 from mxnet_audio.library.utility.audio_utils import compute_melgram
 from random import shuffle
+from scipy import spatial
 
 
 def cifar10(nb_classes):
@@ -271,7 +272,8 @@ class Cifar10AudioSearch(Cifar10AudioClassifier):
 
     @staticmethod
     def distance(v1, v2, skip_exact_match=True):
-        dist = np.sqrt(np.sum((v1-v2) ** 2))
+        # dist = np.sqrt(np.sum((v1-v2) ** 2))
+        dist = spatial.distance.cosine(v1,v2)
         if skip_exact_match and dist == 0:
             return 10000000000
         return dist
