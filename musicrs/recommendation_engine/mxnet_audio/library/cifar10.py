@@ -272,7 +272,6 @@ class Cifar10AudioSearch(Cifar10AudioClassifier):
 
     @staticmethod
     def distance(v1, v2, skip_exact_match=True):
-        # dist = np.sqrt(np.sum((v1-v2) ** 2))
         dist = spatial.distance.cosine(v1,v2)
         if skip_exact_match and dist == 0:
             return 10000000000
