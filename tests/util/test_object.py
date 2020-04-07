@@ -16,11 +16,7 @@ def test_dict_to_list_returns_list_when_valid_arguments_is_dict():
     """
     Test a dictionary converted to list.
     """
-    value = {
-        "foo": "bar",
-        "just": "test",
-        "hello": "world",
-    }
+    value = {"foo": "bar", "just": "test", "hello": "world"}
 
     expected = [
         {"name": "foo", "value": "bar"},
@@ -104,11 +100,7 @@ def test_linearize_1():
     Test a flat / linear dictionary
     is returned as it is.
     """
-    value = {
-        "foo": "bar",
-        "just": "test",
-        "message": "Hello World!",
-    }
+    value = {"foo": "bar", "just": "test", "message": "Hello World!"}
 
     assert linearize(value) == value
 
@@ -154,11 +146,7 @@ def test_delinearize_1():
     """
     Test a regular flat dictionary returned as it is.
     """
-    value = {
-        "foo": "bar",
-        "just": "test",
-        "message": "Hello World!",
-    }
+    value = {"foo": "bar", "just": "test", "message": "Hello World!"}
 
     assert delinearize(value) == value
 
@@ -205,15 +193,9 @@ def test_delinearize_4():
     """
     Test it delinearizes an array.
     """
-    value = {
-        "array.0": "Test 1",
-        "array.1": "Test 2",
-        "array.2": "Test 3",
-    }
+    value = {"array.0": "Test 1", "array.1": "Test 2", "array.2": "Test 3"}
 
-    expected = {
-        "array": ["Test 1", "Test 2", "Test 3"],
-    }
+    expected = {"array": ["Test 1", "Test 2", "Test 3"]}
 
     assert delinearize(value) == expected
 
@@ -374,7 +356,7 @@ def test_without_attr_return_list_without_the_attr_for_nested_dict():
         "Name": "Geeks",
         "Gender": "Male",
         "Age": "55",
-        "Address": {"Street": "Charkhal", "District": "Kathmandu",},
+        "Address": {"Street": "Charkhal", "District": "Kathmandu"},
     }
-    dict2 = {"Name": "Geeks", "Gender": "Male", "Address": {"Street": "Charkhal",}}
+    dict2 = {"Name": "Geeks", "Gender": "Male", "Address": {"Street": "Charkhal"}}
     assert without_attr(dict1, ["District", "Age"]) == dict2
