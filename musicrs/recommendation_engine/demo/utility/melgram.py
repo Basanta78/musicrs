@@ -9,14 +9,16 @@ import numpy as np
 
 
 def patch_path(path):
-    return os.path.join(os.path.dirname(__file__), '..', path)
+    return os.path.join(os.path.dirname(__file__), "..", path)
 
 
 def melgram_v1(audio_file_path, to_file):
     sig, fs = librosa.load(audio_file_path)
 
-    pylab.axis('off')  # no axis
-    pylab.axes([0., 0., 1., 1.], frameon=False, xticks=[], yticks=[])  # Remove the white edge
+    pylab.axis("off")  # no axis
+    pylab.axes(
+        [0., 0., 1., 1.], frameon=False, xticks=[], yticks=[]
+    )  # Remove the white edge
     S = librosa.feature.melspectrogram(y=sig, sr=fs)
     librosa.display.specshow(librosa.power_to_db(S, ref=np.max))
     pylab.savefig(to_file, bbox_inches=None, pad_inches=0)
@@ -38,13 +40,13 @@ def melgram_v2(audio_file_path):
 
     # Display the spectrogram on a mel scale
     # sample rate and hop length parameters are used to render the time axis
-    librosa.display.specshow(log_S, sr=sr, x_axis='time', y_axis='mel')
+    librosa.display.specshow(log_S, sr=sr, x_axis="time", y_axis="mel")
 
     # Put a descriptive title on the plot
-    plt.title('mel power spectrogram')
+    plt.title("mel power spectrogram")
 
     # draw a color bar
-    plt.colorbar(format='%+02.0f dB')
+    plt.colorbar(format="%+02.0f dB")
 
     # Make the figure layout compact
     plt.tight_layout()
@@ -52,14 +54,14 @@ def melgram_v2(audio_file_path):
 
 
 def main():
-    sys.path.append(patch_path('..'))
+    sys.path.append(patch_path(".."))
 
-    audio_file_path = patch_path('data/audio_samples/example.mp3')
+    audio_file_path = patch_path("data/audio_samples/example.mp3")
     from mxnet_audio.library.utility.audio_utils import compute_melgram
 
     arr = compute_melgram(audio_file_path)
-    print('melgram: ', arr.shape)
+    print("melgram: ", arr.shape)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
