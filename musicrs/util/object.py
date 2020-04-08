@@ -6,7 +6,7 @@ import flatten_json
 from copy import deepcopy
 from typing import Dict, List
 
-from musicrs.util.types import is_dict, is_iterable, is_string, is_list
+from musicrs.util.types_check import is_dict, is_iterable, is_string, is_list
 
 
 def dict_to_list(dict: Dict, name_key: str = "name", value_key: str = "value"):

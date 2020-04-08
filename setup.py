@@ -17,6 +17,7 @@ requirements = [
     "lru-dict==1.1.6",
     "scipy==1.4.1",
     "scikit-learn==0.22.2.post1",
+    "slackclient==2.5.0"
 ]
 
 # Development Requirements
