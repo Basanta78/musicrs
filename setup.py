@@ -10,6 +10,13 @@ requirements = [
     "flatten_json==0.1.7",
     "boto3==1.12.6",
     "youtube-dl==2020.3.24",
+    "librosa==0.6.0",
+    "matplotlib==3.2.1",
+    "mxnet-cu90==1.6.0",
+    "mxnet==1.6.0",
+    "lru-dict==1.1.6",
+    "scipy==1.4.1",
+    "scikit-learn==0.22.2.post1",
 ]
 
 # Development Requirements
