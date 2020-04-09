@@ -4,8 +4,11 @@ Slack API utility
 import os
 import json
 import slack
+import dotenv
 
-SLACK_TOKEN = ""
+dotenv.load_dotenv()
+
+SLACK_TOKEN = os.getenv("SLACK_API_TOKEN")
 slackClient = slack.WebClient(token=SLACK_TOKEN)
 
 
