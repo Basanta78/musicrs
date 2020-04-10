@@ -4,12 +4,10 @@ Slack API utility
 import os
 import json
 import slack
-import dotenv
+import musicrs.settings as settings
 
-dotenv.load_dotenv()
-
-SLACK_TOKEN = os.getenv("SLACK_API_TOKEN")
-slackClient = slack.WebClient(token=SLACK_TOKEN)
+SLACK_API_TOKEN = settings.SLACK_API_TOKEN
+slackClient = slack.WebClient(token=SLACK_API_TOKEN)
 
 
 def retrieve_slack_messages(channel: str):
