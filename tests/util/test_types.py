@@ -1,6 +1,6 @@
 """ Tests for musicrs.util.types. """
 
-from musicrs.util.types import is_iterable, is_string, is_dict, is_list
+from musicrs.util.types_check import is_iterable, is_string, is_dict, is_list
 
 
 def test_is_iterable_1():
