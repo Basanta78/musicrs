@@ -17,7 +17,7 @@ def melgram_v1(audio_file_path, to_file):
 
     pylab.axis("off")  # no axis
     pylab.axes(
-        [0., 0., 1., 1.], frameon=False, xticks=[], yticks=[]
+        [0.0, 0.0, 1.0, 1.0], frameon=False, xticks=[], yticks=[]
     )  # Remove the white edge
     S = librosa.feature.melspectrogram(y=sig, sr=fs)
     librosa.display.specshow(librosa.power_to_db(S, ref=np.max))
