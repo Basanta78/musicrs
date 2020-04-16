@@ -4,15 +4,21 @@ Date time utilities
 from datetime import datetime
 
 
-def timestamp_to_datetime(ts):
-    """ Convert timestamp to datetime """
-    return datetime.fromtimestamp(ts)
+def timestamp_to_date(ts):
+    """
+    Convert timestamp to date.
+    :param ts: timestamp
+    :type ts: float
+    """
+    date = datetime.fromtimestamp(ts).date()
+    return date.strftime("%Y-%m-%d")
 
 
-def datetime_to_timestamp(dt):
+def date_to_timestamp(date):
     """
-    Convert datetime to timestamp
-    param dt: datetime
-    type dt: <class 'datetime.datetime'>
+    Convert date to timestamp.
+    :param date: date (%Y-%m-%d) e.g 1970-01-01
+    :type date: str
     """
+    dt = datetime.strptime(date, "%Y-%m-%d")  # convert to datetime
     return datetime.timestamp(dt)
