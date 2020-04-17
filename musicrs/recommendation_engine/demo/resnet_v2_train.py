@@ -9,7 +9,7 @@ def patch_path(path):
 
 def load_audio_path_label_pairs(max_allowed_pairs=None):
     from mxnet_audio.library.utility.gtzan_loader import (
-        download_gtzan_genres_if_not_found
+        download_gtzan_genres_if_not_found,
     )
 
     download_gtzan_genres_if_not_found(patch_path("very_large_data/gtzan"))
