@@ -64,6 +64,7 @@ def retrieve_slack_messages(channel: str, start_date: str, end_date: str):
                 }
 
                 retrieved_message.update(song)
+                retrieved_message.update(get_user_info(message["user"]))
                 retrieved_messages.append(retrieved_message)
 
     return retrieved_messages
