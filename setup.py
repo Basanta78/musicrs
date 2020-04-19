@@ -19,6 +19,8 @@ requirements = [
     "scikit-learn==0.22.2.post1",
     "slackclient==2.5.0",
     "python-dotenv==0.12.0",
+    "click==7.1.1",
+    "SQLAlchemy==1.3.16"
 ]
 
 # Development Requirements
@@ -40,4 +42,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
+    entry_points={"console_scripts": ["musicrs = musicrs.cli:main"]},
 )

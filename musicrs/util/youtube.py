@@ -4,8 +4,7 @@ from __future__ import unicode_literals
 import youtube_dl
 
 
-
-def download_from_youtube(video_links:list, output_format:str, download_path:str):
+def download_from_youtube(video_links: list, output_format: str, download_path: str):
 
     """
     Download video/audio from youtube link

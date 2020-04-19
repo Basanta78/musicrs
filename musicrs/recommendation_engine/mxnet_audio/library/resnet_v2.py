@@ -202,7 +202,7 @@ class ResNetV2AudioClassifier(object):
         num_batches = len(X) // batch_size
 
         metric = mx.metric.Accuracy()
-        loss_avg = 0.
+        loss_avg = 0.0
         for i, (data, label) in enumerate(data_loader):
             data = data.as_in_context(self.model_ctx)
             label = label.as_in_context(self.model_ctx)
@@ -226,7 +226,7 @@ class ResNetV2AudioClassifier(object):
         random_state=42,
         input_shape=(1, 96, 1366),
         nb_classes=10,
-        learning_rate=.001,
+        learning_rate=0.001,
         checkpoint_interval=10,
     ):
 
@@ -271,7 +271,7 @@ class ResNetV2AudioClassifier(object):
         acc_test = []
 
         for e in range(epochs):
-            loss_avg = 0.
+            loss_avg = 0.0
             accuracy = mx.metric.Accuracy()
             for batch_index, (data, label) in enumerate(train_gen):
                 data = data.as_in_context(self.model_ctx)
