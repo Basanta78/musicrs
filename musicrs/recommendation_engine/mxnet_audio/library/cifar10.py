@@ -7,7 +7,7 @@ from lru import LRU
 from mxnet_audio.library.utility.audio_utils import compute_melgram
 from random import shuffle
 from scipy import spatial
-
+import faiss
 
 def cifar10(nb_classes):
     channel_axis = 1
@@ -315,6 +315,47 @@ class Cifar10AudioSearch(Cifar10AudioClassifier):
     def reset(self):
         self.database = []
 
+    def index_database_vector(self, d, xb):
+        """
+        Index the database vector(i.e our song embeddings) using faiss
+        :param d: dimension of the database vector
+        :type d: integer
+
+        :param xb: database vector/song embeddings
+        :tyoe xb: Numpy array (2D)
+        """
+        self.database_vectors = xb
+
+        faiss.normalize_L2(self.database_vectors) # Normalize the vectors
+
+        self.index = faiss.IndexFlatIP(d)   # Initialize index for the vector with dimension d
+        self.index.add(self.database_vectors)   # Add database vector for indexing
+
+        print(self.index.ntotal) # Prints total number of indexed vectors
+
+    def search(self, xq, k=1):
+        """
+        Search most similar vector from database_vector given query_vector
+        :param xq: query vectors of a user
+        :type xq: Numpy array (2D)
+
+        :param k: number of nearest neighbour vector for each query
+        :type k: integer
+        """
+        faiss.normalize_L2(xq)
+        C, I = self.index.search(xq, k)   # Returns cosine similarity and index of the nearest neighbour vectors
+        
+        result_tuple = zip(C.flatten(), I.flatten())
+
+        # Sort the result in descending order so the most similar is always the first
+        similar_vector_index_sorted = []
+        for x in result_tuple:
+            similar_vector_index_sorted.append(x)
+        similar_vector_index_sorted.sort(key=operator.itemgetter(0), reverse=True)
+        return similar_vector_index_sorted
+
+
+
     @staticmethod
     def distance(v1, v2, skip_exact_match=True):
         dist = spatial.distance.cosine(v1, v2)
@@ -350,6 +391,14 @@ class Cifar10AudioRecommender(Cifar10AudioSearch):
             _, *self.history = self.history
         return self.history
 
+    def track_user_vector(self, query_vectors):
+        """
+        Store the user query vector
+        :param query_vectors: user song embeddings
+        :type query_vectors: numpy array 
+        """
+        self.query_vectors = query_vectors
+
     def recommend(self, limits=10):
         listened_songs = set(self.history)
         recommended_songs = set()
@@ -363,3 +412,23 @@ class Cifar10AudioRecommender(Cifar10AudioSearch):
         lis = list(recommended_songs)
         shuffle(lis)
         return lis[:limits] if len(lis) >= limits else lis
+
+    def recommend_music(self, limits = 1):
+        """
+        Recommend music
+        :param limits: No of recommendation to receive
+        :type limits: integer
+        """
+        similar_vector_index_sorted = self.search(self.query_vectors)   # list of (similarity, index) of recommended songs
+        
+        recommended_index = similar_vector_index_sorted[0][1] # Use this index to query the url of the recommended song
+
+        """
+        Implement as below
+        recommended_url = get_url(recommended_index)
+        """
+        
+
+        
+        
+
