@@ -36,18 +36,36 @@ def main():
 
     music_recommender = Cifar10AudioRecommender()
     music_recommender.load_model(model_dir_path=patch_path("models"))
-    music_archive = load_audio_path_label_pairs()
-    for path, _ in music_archive:
-        music_recommender.index_audio(path)
 
-    # create fake user history on musics listening to
-    shuffle(music_archive)
-    for i in range(30):
-        song_i_am_listening = music_archive[i][0]
-        music_recommender.track(song_i_am_listening)
+    """
+    The following piece of code is just for trial to see how to integrate faiss with recommendation
+    and shall be adjusted accordingly later.
+    """
 
-    for idx, similar_audio in enumerate(music_recommender.recommend(limits=10)):
-        print("result #%s: %s" % (idx + 1, similar_audio))
+    # Both the query vector and database vector must be numpy array of dtype = "float32". faiss supports float32 only 
+    # Load encoded music from database
+    database_vector = get_database_vector()
+
+    # Load encoded music from user profile
+    query_vector = get_query_vector(user_id)
+
+
+    # Index the database vector using faiss
+    music_recommender.index_database_vector(len(database_vector[0]),database_vector)
+
+    music_recommender.track_user_vector(query_vector)
+    # music_archive = load_audio_path_label_pairs()
+    # for path, _ in music_archive:
+    #     music_recommender.index_audio(path)
+
+    # # create fake user history on musics listening to
+    # shuffle(music_archive)
+    # for i in range(30):
+    #     song_i_am_listening = music_archive[i][0]
+    #     music_recommender.track(song_i_am_listening)
+
+    # for idx, similar_audio in enumerate(music_recommender.recommend(limits=10)):
+    #     print("result #%s: %s" % (idx + 1, similar_audio))
 
 
 if __name__ == "__main__":
