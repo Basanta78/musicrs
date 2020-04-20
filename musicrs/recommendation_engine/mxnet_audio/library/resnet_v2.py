@@ -4,7 +4,7 @@ import mxnet as mx
 from mxnet import nd, autograd, gluon
 import os
 from lru import LRU
-from mxnet_audio.library.utility.audio_utils import compute_melgram
+from musicrs.recommendation_engine.mxnet_audio.library.utility.audio_utils import compute_melgram
 from random import shuffle
 
 

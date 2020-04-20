@@ -4,7 +4,7 @@ import mxnet as mx
 from mxnet import nd, autograd, gluon
 import os
 from lru import LRU
-from mxnet_audio.library.utility.audio_utils import compute_melgram
+from musicrs.recommendation_engine.mxnet_audio.library.utility.audio_utils import compute_melgram
 from random import shuffle
 from scipy import spatial
 
@@ -297,6 +297,7 @@ class Cifar10AudioClassifier(object):
     def encode_audio(self, audio_path):
         mg = compute_melgram(audio_path)
         mg = nd.array(np.expand_dims(mg, axis=0), ctx=self.model_ctx)
+        print("----------",mg)
         return self.model(mg).asnumpy()[0]
 
     def predict_class(self, audio_path):
