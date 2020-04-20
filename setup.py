@@ -20,7 +20,8 @@ requirements = [
     "slackclient==2.5.0",
     "python-dotenv==0.12.0",
     "click==7.1.1",
-    "SQLAlchemy==1.3.16"
+    "SQLAlchemy==1.3.16",
+    "pydub==0.23.1"
 ]
 
 # Development Requirements
