@@ -32,8 +32,10 @@ def dump_inteference_db(url, serialized_np):
     :param serialized_np: serialized numpy array
     """
     with session_scope() as session:
-        inference = Inference(youtube_url=url, audio_encoding=serialized_np)
-        session.add(inference)
+        identity = session.query(Inference).filter_by(youtube_url=url).first()
+        if not identity:
+            inference = Inference(youtube_url=url, audio_encoding=serialized_np)
+            session.add(inference)
 
 
 def generate_inference(url):
