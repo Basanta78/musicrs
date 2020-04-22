@@ -10,7 +10,7 @@ def read_file_convert(basePath,fileName):
 
   f=open(os.path.join(basePath,fileName), "r")
   if f.mode == 'r':
-    contents =f.readlines()
+    contents = f.readlines()
     for youtubeId in contents: 
       if not '#' in youtubeId: 
-        print(baseUrl+youtubeId)
+        return baseUrl+youtubeId
