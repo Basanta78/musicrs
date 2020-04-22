@@ -4,7 +4,7 @@ import sys
 sys.path.append("/usr/bin/ffmpeg")
 
 
-def audioTrimmer(files_path, file_name, fileType, startMin, startSec, endMin, endSec):
+def audioTrimmer(files_path, fileType, startMin, startSec, endMin, endSec):
     MIN = 60
     MILI_SECOND = 1000
 
@@ -13,10 +13,11 @@ def audioTrimmer(files_path, file_name, fileType, startMin, startSec, endMin, en
     endTime = endMin * MIN * MILI_SECOND + endSec * MILI_SECOND
 
     # Opening file and extracting segment
-    segment = AudioSegment.from_file(files_path + "/" + file_name, fileType)
+    segment = AudioSegment.from_file(files_path, fileType)
     extract = segment[startTime:endTime]
 
     # Saving
-    extract.export(
-        files_path + "/" + file_name + "-extract." + fileType, format=fileType
-    )
+
+    file_path = extract.export(files_path + "-extract." + fileType, format=fileType)
+
+    return file_path.name

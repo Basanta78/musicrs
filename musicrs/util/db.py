@@ -9,7 +9,6 @@ from musicrs.model.base import Base
 from musicrs.settings import DATABASE_CONN
 
 
-
 def create_db_engine():
     """ Create database connection engine"""
     database_url = URL(**DATABASE_CONN)

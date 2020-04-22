@@ -2,7 +2,9 @@ import urllib.request
 import os
 import tarfile
 
-from mxnet_audio.library.utility.download_utils import reporthook
+from musicrs.recommendation_engine.mxnet_audio.library.utility.download_utils import (
+    reporthook,
+)
 
 gtzan_labels = {
     0: "blues",
