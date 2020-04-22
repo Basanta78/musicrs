@@ -1,7 +1,7 @@
 import os
 
 from musicrs.util.audioTrimmer import audioTrimmer
-from musicrs.util.youtube import download_from_youtube
+from musicrs.util.youtube import download_from_youtube, generate_url
 from musicrs.recommendation_engine.mxnet_audio.library.cifar10 import (
     Cifar10AudioClassifier,
 )
@@ -25,17 +25,30 @@ def process_url(url):
     return trimmed_file_path
 
 
-def dump_inteference_db(url, serialized_np):
+def dump_inteference_db(video_id, serialized_np):
     """
     Dump generated numpy array in db
     :param url: video url
     :param serialized_np: serialized numpy array
     """
     with session_scope() as session:
-        identity = session.query(Inference).filter_by(youtube_url=url).first()
+        identity = session.query(Inference).filter_by(video_id=video_id).first()
         if not identity:
-            inference = Inference(youtube_url=url, audio_encoding=serialized_np)
+            inference = Inference(video_id=video_id, audio_encoding=serialized_np)
             session.add(inference)
+
+
+def check_new_video(video_id):
+    """
+    Check if the video id is new
+    :param video_id: video id
+    :return: bool
+    """
+    with session_scope() as session:
+        identity = session.query(Inference).filter_by(video_id=video_id).first()
+        if identity:
+            return True
+        return False
 
 
 def generate_inference(url):
@@ -53,15 +66,32 @@ def generate_inference(url):
     return np_array
 
 
-def load_inference():
+def read_training_file(file_path):
+    """
+    Read training file
+    :param file_path: file path
+    :return: video id list
+    """
+    video_id_list = []
+    with open(file_path) as fp:
+        for video_id in fp:
+            processed_id = video_id.strip()
+            if processed_id != "" and "#" not in processed_id:
+                video_id_list.append(processed_id)
+        return video_id_list
+
+
+def load_inference(file_path):
     """
     Load inferences to database table
     """
     # Read training files
-    # Generate youtube url
-    # Iterate on the  url
-    url = "https://www.youtube.com/watch?v=qgBZjbByYkY"
-    np_array = generate_inference(url)
-    serialized_np = serialize(np_array)
-    dump_inteference_db(url, serialized_np)
+    video_ids = read_training_file(file_path)
+    for video_id in video_ids:
+        if check_new_video(video_id):
+            continue
+        url = generate_url(video_id)
+        np_array = generate_inference(url)
+        serialized_np = serialize(np_array)
+        dump_inteference_db(video_id, serialized_np)
     # delete audio and video files
