@@ -13,7 +13,7 @@ def serialize(numpy_obj):
 
 def de_serialize(serialized_obj):
     memfile = io.BytesIO()
-    memfile.write(json.loads(serialized_obj).encode("utf-8"))
+    memfile.write(json.loads(serialized_obj).encode("latin-1"))
     memfile.seek(0)
-    numpy_obj = numpy.load(memfile)
+    numpy_obj = numpy.load(memfile, allow_pickle=True)
     return numpy_obj
