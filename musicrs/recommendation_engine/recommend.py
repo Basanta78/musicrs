@@ -12,7 +12,7 @@ def get_encoding_list(data):
     """
     encodings = []
     for d in data:
-        encodings.append(de_serialize(d["audio_encoding"]).astype('float32'))
+        encodings.append(de_serialize(d["audio_encoding"]).astype("float32"))
     return np.asarray(encodings)
 
 
