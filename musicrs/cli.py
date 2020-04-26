@@ -15,5 +15,6 @@ def reset():
 
 
 @main.command()
-def inference():
-    load_inference()
+@click.option("--file-path", required=True)
+def inference(file_path):
+    load_inference(file_path)
