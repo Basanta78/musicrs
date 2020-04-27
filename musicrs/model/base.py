@@ -14,7 +14,7 @@ class UserProfile(Base):
     user_name = Column(String(100), nullable=False)
     user_email = Column(String(100), nullable=True)
     user_profile_picture = Column(String(512), nullable=True)
-    youtube_url = Column(String, nullable=True)
+    video_id = Column(String, nullable=True)
     audio_encoding = Column(String, nullable=True)
     created_date = Column(TIMESTAMP(timezone=True), default=func.now())
     updated_date = Column(TIMESTAMP(timezone=True), onupdate=func.now())
@@ -24,7 +24,7 @@ class Inference(Base):
     __tablename__ = "inference"
 
     id = Column(Integer, primary_key=True)
-    youtube_url = Column(String, nullable=True)
+    video_id = Column(String, nullable=True)
     audio_encoding = Column(String, nullable=True)
 
 
