@@ -9,6 +9,7 @@ from musicrs.util.date_time import *
 
 from musicrs.model.base import UserProfile
 from musicrs.model.db_session import session_scope
+from musicrs.util.youtube import get_video_id
 
 SLACK_API_TOKEN = settings.SLACK_API_TOKEN
 slackClient = slack.WebClient(token=SLACK_API_TOKEN)
@@ -79,11 +80,12 @@ def dump_slack_to_db(slack_message, serialized_np):
     :param slack_message: dict
     :param serialized_np: str
     """
+    video_id = get_video_id(slack_message["song_url"])
     with session_scope() as session:
         identity = (
             session.query(UserProfile)
             .filter_by(
-                user_id=slack_message["user"], youtube_url=slack_message["song_url"]
+                user_id=slack_message["user"], video_id=video_id
             )
             .first()
         )
@@ -94,7 +96,7 @@ def dump_slack_to_db(slack_message, serialized_np):
                 user_name=slack_message["user_real_name"],
                 user_email=slack_message["user_email"],
                 user_profile_picture=slack_message["user_profile_picture"],
-                youtube_url=slack_message["song_url"],
+                video_id=video_id,
                 audio_encoding=serialized_np,
             )
             session.add(user_profile)
