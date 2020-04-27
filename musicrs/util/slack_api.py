@@ -10,6 +10,8 @@ from musicrs.util.date_time import *
 from musicrs.model.base import UserProfile
 from musicrs.model.db_session import session_scope
 from musicrs.util.youtube import get_video_id
+from musicrs.util.numpy import serialize
+from musicrs.recommendation_engine.inference import generate_inference
 
 SLACK_API_TOKEN = settings.SLACK_API_TOKEN
 slackClient = slack.WebClient(token=SLACK_API_TOKEN)
@@ -84,9 +86,7 @@ def dump_slack_to_db(slack_message, serialized_np):
     with session_scope() as session:
         identity = (
             session.query(UserProfile)
-            .filter_by(
-                user_id=slack_message["user"], video_id=video_id
-            )
+            .filter_by(user_id=slack_message["user"], video_id=video_id)
             .first()
         )
 
@@ -100,3 +100,17 @@ def dump_slack_to_db(slack_message, serialized_np):
                 audio_encoding=serialized_np,
             )
             session.add(user_profile)
+
+
+def load_slack_messages(start_date, end_date):
+    """
+    Retrieve slack messages and encoding and load into db
+    :param start_date: str (YYYY-mm-dd)
+    :param end_date: str (YYYY-mm-dd)
+    """
+    slack_channel = settings.SLACK_CHANNEL_ID
+    retrieved_messages = retrieve_slack_messages(channel, start_date, end_date)
+    for slack_message in retrieved_messages:
+        inference = generate_inference(slack_message["song_url"])
+        serialized_np = serialize(inference)
+        dump_slack_to_db(slack_message, serialized_np)
