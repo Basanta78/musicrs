@@ -8,6 +8,7 @@ from musicrs.recommendation_engine.mxnet_audio.library.cifar10 import (
 from musicrs.model.db_session import session_scope
 from musicrs.model.base import Inference
 from musicrs.util.numpy import serialize
+from musicrs.util.object import as_dict
 
 
 def process_url(url):
@@ -38,6 +39,19 @@ def dump_inteference_db(video_id, serialized_np):
             session.add(inference)
 
 
+def fetch_inference_db():
+    """
+    Fetch  rows from the  inference table
+    :return: table records
+    """
+    inferences = []
+    with session_scope() as session:
+        data = session.query(Inference).all()
+        for d in data:
+            inferences.append(as_dict(d))
+    return inferences
+
+
 def check_new_video(video_id):
     """
     Check if the video id is new
@@ -47,8 +61,8 @@ def check_new_video(video_id):
     with session_scope() as session:
         identity = session.query(Inference).filter_by(video_id=video_id).first()
         if identity:
-            return True
-        return False
+            return False
+        return True
 
 
 def generate_inference(url):
@@ -89,9 +103,8 @@ def load_inference(file_path):
     video_ids = read_training_file(file_path)
     for video_id in video_ids:
         if check_new_video(video_id):
-            continue
-        url = generate_url(video_id)
-        np_array = generate_inference(url)
-        serialized_np = serialize(np_array)
-        dump_inteference_db(video_id, serialized_np)
-    # delete audio and video files
+            url = generate_url(video_id)
+            np_array = generate_inference(url)
+            serialized_np = serialize(np_array)
+            dump_inteference_db(video_id, serialized_np)
+            # delete audio and video files
