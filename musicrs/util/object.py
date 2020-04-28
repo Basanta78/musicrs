@@ -5,8 +5,18 @@ import flatten_json
 
 from copy import deepcopy
 from typing import Dict, List
+from sqlalchemy import inspect
 
 from musicrs.util.types_check import is_dict, is_iterable, is_string, is_list
+
+
+def as_dict(obj):
+    """
+    Convert sqlalchemy object to dictionary
+    :param obj: SQL Alchemy object
+    :return: dictionary
+    """
+    return {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs}
 
 
 def dict_to_list(dict: Dict, name_key: str = "name", value_key: str = "value"):
