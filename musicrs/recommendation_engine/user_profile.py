@@ -1,10 +1,25 @@
 import musicrs.settings as settings
+from musicrs.util.object import as_dict
 from musicrs.util.numpy import serialize
 from musicrs.model.base import UserProfile
 from musicrs.util.youtube import get_video_id
 from musicrs.model.db_session import session_scope
 from musicrs.util.slack_api import retrieve_slack_messages
 from musicrs.recommendation_engine.inference import generate_inference
+
+
+def fetch_user_profile(user_id):
+    """
+    Fetch user data based on user id
+    :param user_id: user id
+    :return: list of user data
+    """
+    user_data = []
+    with session_scope() as session:
+        data = session.query(UserProfile).filter_by(user_id=user_id).all()
+        for d in data:
+            user_data.append(as_dict(d))
+    return user_data
 
 
 def dump_slack_to_db(slack_message, serialized_np):
