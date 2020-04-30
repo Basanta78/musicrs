@@ -28,7 +28,7 @@ def inference(file_path):
     "--start-date", "-s", required=False, default=date.today() - timedelta(days=10)
 )
 @click.option("--end-date", "-e", required=False, default=date.today())
-def user_message(start_date, end_date):
+def message(start_date, end_date):
     load_slack_messages(start_date, end_date)
 
 
