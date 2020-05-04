@@ -11,9 +11,15 @@ def dump_user_recommendation(user_id, url, similarity):
     :param similarity: similarity percentage
     """
     with session_scope() as session:
-        user = session.query(Recommendation).filter_by(user_id=user_id, recommended_url=url).first()
+        user = (
+            session.query(Recommendation)
+            .filter_by(user_id=user_id, recommended_url=url)
+            .first()
+        )
         if not user:
-            user_recommend = Recommendation(user_id=user_id, recommended_url=url, similarity=similarity)
+            user_recommend = Recommendation(
+                user_id=user_id, recommended_url=url, similarity=similarity
+            )
             session.add(user_recommend)
 
 
