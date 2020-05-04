@@ -8,6 +8,7 @@ from musicrs.recommendation_engine.similarity import (
     search,
     get_max_similarity,
 )
+from musicrs.recommendation_engine.user_recommend import dump_user_recommendation
 
 
 def get_encoding_list(data):
@@ -37,4 +38,4 @@ def recommend_music(user_id):
     similar_encoding = inference_data[most_similar[1]]
     recommend_url = generate_url(similar_encoding["video_id"])
     similarity_percent = most_similar[0] * 100
-    print(recommend_url, similarity_percent)
+    dump_user_recommendation(user_id, recommend_url, similarity_percent)
