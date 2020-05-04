@@ -1,4 +1,5 @@
 import faiss
+from operator import itemgetter
 
 
 def index_database_vector(dimension, database_vectors):
@@ -42,3 +43,14 @@ def search(index, user_vector, k=1):
         similar_vector_index_sorted.append(x)
     # similar_vector_index_sorted.sort(key=operator.itemgetter(0), reverse=True)
     return similar_vector_index_sorted
+
+
+def get_max_similarity(data_list):
+    """
+    Get max similar value
+    :param data_list: data list to check: list of tuples
+    :return: max value tuple
+    """
+    index = 0
+    res = max(data_list, key=itemgetter(index))
+    return res
