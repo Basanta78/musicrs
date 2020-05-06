@@ -9,12 +9,14 @@ from musicrs.util.date_time import *
 
 from musicrs.model.base import UserProfile
 from musicrs.model.db_session import session_scope
-from musicrs.util.youtube import get_video_id
+from musicrs.util.youtube import get_video_id, generate_url
 from musicrs.util.numpy import serialize
 from musicrs.recommendation_engine.inference import generate_inference
 
 SLACK_API_TOKEN = settings.SLACK_API_TOKEN
+SLACK_BOT_TOKEN = settings.SLACK_BOT_TOKEN
 slackClient = slack.WebClient(token=SLACK_API_TOKEN)
+slackBotClient = slack.WebClient(token=SLACK_BOT_TOKEN)
 
 
 def get_user_info(user_id):
@@ -74,6 +76,21 @@ def retrieve_slack_messages(channel: str, start_date: str, end_date: str):
                 retrieved_messages.append(retrieved_message)
 
     return retrieved_messages
+
+
+def post_slack_message(user_id, video_id):
+    try:
+        dm_response = slackBotClient.conversations_open(users=user_id)
+        dm_channel = dm_response["channel"]["id"]
+        video_url = generate_url(video_id=video_id)
+
+        response = slackBotClient.chat_postMessage(
+            channel=dm_channel,
+            text=video_url
+        )
+        print("Posted {0} to the user {1}".format(video_url, user_id))
+    except:
+        print("Cannot post video to the user: " + str(user_id))
 
 
 def dump_slack_to_db(slack_message, serialized_np):
