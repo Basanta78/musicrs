@@ -48,8 +48,8 @@ def retrieve_slack_messages(channel: str, start_date: str, end_date: str):
     :rtype list
     """
 
-    oldest = date_to_timestamp(start_date)
-    latest = date_to_timestamp(end_date)
+    oldest = date_to_timestamp(str(start_date))
+    latest = date_to_timestamp(str(end_date))
 
     response = slackClient.conversations_history(
         channel=channel, latest=str(latest), oldest=str(oldest)
@@ -91,10 +91,7 @@ def post_slack_message(user_id, video_id):
         dm_channel = dm_response["channel"]["id"]
         video_url = generate_url(video_id=video_id)
 
-        response = slackBotClient.chat_postMessage(
-            channel=dm_channel,
-            text=video_url
-        )
+        response = slackBotClient.chat_postMessage(channel=dm_channel, text=video_url)
         print("Posted {0} to the user {1}".format(video_url, user_id))
     except:
         print("Cannot post video to the user: " + str(user_id))

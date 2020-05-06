@@ -33,3 +33,4 @@ class Recommendation(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(String, nullable=False)
     recommended_url = Column(String, nullable=True)
+    similarity = Column(String, nullable=True)
