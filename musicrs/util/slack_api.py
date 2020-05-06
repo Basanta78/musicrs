@@ -79,6 +79,13 @@ def retrieve_slack_messages(channel: str, start_date: str, end_date: str):
 
 
 def post_slack_message(user_id, video_id):
+    """
+    Sends video url to the user.
+    param user_id: user's member id in slack workspace
+    type user_id: string
+    param video_id: youtube video id
+    type video_id: string
+    """
     try:
         dm_response = slackBotClient.conversations_open(users=user_id)
         dm_channel = dm_response["channel"]["id"]
