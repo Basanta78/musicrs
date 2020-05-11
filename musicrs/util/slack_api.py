@@ -6,6 +6,9 @@ import json
 import slack
 import musicrs.settings as settings
 from musicrs.util.date_time import *
+from musicrs.api.logging import get_logger
+
+logger = get_logger("slack")
 
 
 SLACK_API_TOKEN = settings.SLACK_API_TOKEN
@@ -86,6 +89,6 @@ def post_slack_message(user_id, video_url):
         dm_channel = dm_response["channel"]["id"]
 
         response = slackBotClient.chat_postMessage(channel=dm_channel, text=video_url)
-        print("Posted {0} to the user {1}".format(video_url, user_id))
+        logger.info("Posted {0} to the user {1}".format(video_url, user_id))
     except:
-        print("Cannot post video to the user: " + str(user_id))
+        logger.error("Cannot post video to the user {0}".format(user_id))
