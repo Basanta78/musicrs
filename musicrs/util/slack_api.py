@@ -6,10 +6,15 @@ import json
 import slack
 import musicrs.settings as settings
 from musicrs.util.date_time import *
+from musicrs.api.logging import get_logger
+
+logger = get_logger("slack")
 
 
 SLACK_API_TOKEN = settings.SLACK_API_TOKEN
+SLACK_BOT_TOKEN = settings.SLACK_BOT_TOKEN
 slackClient = slack.WebClient(token=SLACK_API_TOKEN)
+slackBotClient = slack.WebClient(token=SLACK_BOT_TOKEN)
 
 
 def get_user_info(user_id):
@@ -69,3 +74,27 @@ def retrieve_slack_messages(channel: str, start_date: str, end_date: str):
                 retrieved_messages.append(retrieved_message)
 
     return retrieved_messages
+
+
+def post_slack_message(user_id, video_url, similarity):
+    """
+    Sends video url to the user.
+    param user_id: user's member id in slack workspace
+    type user_id: string
+    param video_url: youtube video url
+    type video_url: string
+    param similarity: song similarity in percentage
+    """
+    try:
+        dm_response = slackBotClient.conversations_open(users=user_id)
+        dm_channel = dm_response["channel"]["id"]
+
+        message = "You might like this song which is {percent}% similar "\
+            "to your interest: {url}".format(
+                percent=similarity,
+                url=video_url)
+
+        response = slackBotClient.chat_postMessage(channel=dm_channel, text=message)
+        logger.info("Posted {0} to the user {1}".format(video_url, user_id))
+    except:
+        logger.error("Cannot post video to the user {0}".format(user_id))
