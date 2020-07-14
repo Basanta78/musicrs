@@ -20,7 +20,6 @@ FROM base AS main
 # Image used for running tests.
 FROM base AS test
 
-ENV NODE_VERSION 12.14.1
 
 RUN apt-get update \
   && apt-get install -y curl xz-utils \
@@ -33,16 +32,14 @@ RUN apt-get update \
   && apt-get autoclean -y \
   && rm -rf /var/lib/apt/lists/*
 
-ENV PATH "$PATH:/usr/local/lib/nodejs/node-v${NODE_VERSION}-linux-x64/bin:/source/node_modules/.bin"
 
-COPY ["package.json", "package-lock.json", "pyrightconfig.json", "./"]
+COPY ["./"]
 
-RUN pip install .[dev] && npm install
+RUN pip install .[dev] 
 
 COPY ["tests", "./"]
 
 # Test the code is good, types are safe and tests are passing.
 CMD \
   echo "\nRUNNING CODE STYLE CHECK (BLACK)" && black --check --diff . && \
-  echo "\nRUNNING TYPE CHECKS" && pyright && \
   echo "\nRUNNING TESTS" && pytest -vvv
