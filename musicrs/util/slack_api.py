@@ -62,14 +62,10 @@ def retrieve_slack_messages(channel: str, start_date: str, end_date: str):
             retrieved_message["timestamp"] = message["ts"]
 
             if message.get("attachments"):
-                attached_song = message["attachments"][0]
-                song = {
-                    "song_title": attached_song["title"],
-                    "song_url": attached_song["original_url"],
-                    "youtube_channel": attached_song["author_name"],
-                }
+                attachment = message["attachments"][0]
+                video_url = attachment["video_url"]
+                similarity = attachment["similarity"]
 
-                retrieved_message.update(song)
                 retrieved_message.update(get_user_info(message["user"]))
                 retrieved_messages.append(retrieved_message)
 
